@@ -1,8 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const abc=require('./routes/productRoutes')
-const cors =require("cors")
+const feedback=require('./routes/feedbackRouter')
+const router=require('./routes/profileRouter')
+const addBook =require('./routes/addBookRouter')
+const path = require('path');
+
+
+
+const cors =require("cors");
+const favorite= require('./routes/favoriteRouter');
+const { MONGODB_URL } = require('./config');
+require('dotenv').config();
+
 const app = express();
 //netstat -ano | findstr 5000
 //taskkill /PID 6804 /F
@@ -13,17 +23,23 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/user',
-{ useNewUrlParser: true, useUnifiedTopology: true },);
+mongoose.connect(MONGODB_URL,
+{ useNewUrlParser: true, useUnifiedTopology: true ,useCreateIndex:true},);
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/profile',router);
+app.use('/feedback',feedback);
+app.use('/addBook',addBook);
+app.use('/favorite',favorite);
 
-app.use('/api/product',abc)
+
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
-  const path = require('path');
+ 
   app.get('*', (req,res) => {
       res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
   })

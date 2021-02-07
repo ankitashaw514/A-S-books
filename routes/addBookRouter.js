@@ -1,14 +1,14 @@
 
+
+
 const addBook= require('../models/addBook');
-const multer =require('multer')
-const path =require('path')
 
 const {isAuth,checkAdmin} =require('../authenticate');
 const express = require('express');
-
-
-
 const bodyParser = require('body-parser');
+const cloudinary =require('cloudinary');
+const { fstat } = require('fs');
+require('dotenv').config();
 
 
 
@@ -16,17 +16,42 @@ const addBookRouter = express.Router();
 
 addBookRouter.use(bodyParser.json());
 
-const Storage =multer.diskStorage({
-destination:"./client/public/uploads",
-filename:(req,file,cb)=>{
-  cb(null,file.filename+"_"+Date.now()+path.extname(file.originalname))
-}
+cloudinary.config({
+  cloud_name:process.env.CLOUD_NAME,
+  api_key:process.env.CLOUD_API_KEY,
+  api_secret:process.env.CLOUD_API_SECRET
 })
 
-const upload=multer({storage:Storage}).single('image');
+
+/*uploadRouter.post('/delete',isAuth, (req,res)=>{
+ try{
+ const {public_id}=req.body;
+ cloudinary.v2.uploader.destroy(public_id,async (err,result)=>{
+     if(err){
+         throw err;
+     }
+     res.json({msg:"imsge is deleted"})
+ })
+ }
+ catch(err){
+     return res.status(400).json({msg:err});
+ }  
+})*/
+
+
+
+/*const removeTmp=(path)=>{
+ fs.unlink(path,err=>{
+     if(err){
+         throw err;
+     }
+ })
+}*/
+
   addBookRouter.get('/',(req,res)=>{
       addBook.find({})
       .then(books=>{
+      
         res.json(books);
       })
       .catch(err=>{
@@ -34,11 +59,21 @@ const upload=multer({storage:Storage}).single('image');
       })
   })
 
-  addBookRouter.post('/',upload, (req, res) => {
-    console.log(req.file);
-     const book= new addBook();
+  addBookRouter.post('/',isAuth, (req, res) => {
+    try{  
+      const file=req.files.file;
+      console.log(file);
+      cloudinary.v2.uploader.upload(file.tempFilePath,{folder:'books'},(err,result)=>{
+        if(err){
+          throw err;
+        }
+        //removeTmp(file.tempFilePath)
+        const book= new addBook();
      book.name=req.body.name;
-     book.image='uploads/'+req.file.filename;
+     book.image={
+       public_id:result.public_id,
+       url:result.secure_url
+     },
      book.author=req.body.author;
      book.edition=req.body.edition;
      book.discription=req.body.discription;
@@ -46,17 +81,29 @@ const upload=multer({storage:Storage}).single('image');
      book.price=req.body.price;
      console.log(book);
      book.save()
-     .then(Feedback=>{
-      res.json(Feedback);
-     })
-     .catch(err=>{
-        res.json("fill data again")
-     })
+          .then(Feedback=>{
+            res.json(Feedback);
+          })
+          .catch(err=>{
+              res.json("fill data again")
+          })
+
+
+      })
+      
+        
+   
+    }
+      catch(err){
+        return res.status(400).json({msg:err});
+      } 
     
-  });
+  })
+ 
   
   
-addBookRouter.get("/:id",  (req, res) => {
+addBookRouter.get("/:id",(req, res) => {
+  
  addBook.findOne({ _id: req.params.id })
  .then(Feedback=>{
   return res.json(Feedback);
@@ -65,7 +112,7 @@ addBookRouter.get("/:id",  (req, res) => {
    return res.json("fill data again")
  })
 });
-addBookRouter.delete("/:id",  (req, res) => {
+addBookRouter.delete("/:id", isAuth, (req, res) => {
   addBook.findByIdAndRemove({ _id: req.params.id })
   .then(Feedback=>{
    return res.json(Feedback);
@@ -74,7 +121,7 @@ addBookRouter.delete("/:id",  (req, res) => {
     return res.json("fill data again")
   })
  });
- addBookRouter.delete("/",  (req, res) => {
+ addBookRouter.delete("/", isAuth,checkAdmin, (req, res) => {
   addBook.remove()
   .then(Feedback=>{
    return res.json(Feedback);

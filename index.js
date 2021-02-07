@@ -5,11 +5,15 @@ const feedback=require('./routes/feedbackRouter')
 const router=require('./routes/profileRouter')
 const addBook =require('./routes/addBookRouter')
 const path = require('path');
-
-
-
 const cors =require("cors");
+const fileUpload =require('express-fileupload')
+const cookieParser =require('cookie-parser')
+
 const favorite= require('./routes/favoriteRouter');
+
+
+
+
 const { MONGODB_URL } = require('./config');
 require('dotenv').config();
 
@@ -22,13 +26,21 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-mongoose.Promise = global.Promise;
-mongoose.connect(MONGODB_URL,
-{ useNewUrlParser: true, useUnifiedTopology: true ,useCreateIndex:true},);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(cookieParser())
+app.use(fileUpload({
+  useTempFiles:true
+}))
+
+mongoose.Promise = global.Promise;
+mongoose.connect(MONGODB_URL,
+{ useNewUrlParser: true, useUnifiedTopology: true ,useCreateIndex:true},
+{useFindAndModified:false});
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/profile',router);
 app.use('/feedback',feedback);
 app.use('/addBook',addBook);

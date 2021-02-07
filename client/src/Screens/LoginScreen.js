@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {Link} from 'react-router-dom';
 import { login } from '../actions/userActions';
+import { toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure();
 function LoginScreen(props){
     
  
@@ -13,25 +16,47 @@ function LoginScreen(props){
     const {userInfo,loading,error}=userLogin;
  const dispatch=useDispatch();
  useEffect(()=>{
-     if(userInfo){
-         console.log(userInfo);
-         props.history.push("/")
-     }
+    if(userInfo){
+         
+        props.history.push("/")
+        notify();
+    }
+    else if(error){
+       props.history.push("/") 
+       notifyErr();
+    }
      return ()=>{
 
      }
 
  },[userInfo])
- 
-
+ const MYLOGIN=()=>(
+    
+     <div className="notify" style={{color:"black"}}>
+         Successfully Logged In!
+     </div>
+ )
+ const notify=()=>{
+     toast(<MYLOGIN/>,
+     {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+ }
+ const NOTLOGIN=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+        Go And Register First!
+    </div>
+)
+const notifyErr=()=>{
+    toast(<NOTLOGIN/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
   const submitHandler=(e)=>{
       e.preventDefault();
       dispatch(login(email,password));
       
+    
 
-
-
-  }
+ }
 
  
 return(
@@ -40,11 +65,7 @@ return(
         <form onSubmit={submitHandler}>
             <ul className="login-form-container">
                     <h1>LOGIN</h1>
-                    {loading && <div>Loding...</div>}
-                    {error && <div>error</div>}
                 <li>
-                   
-                
                     <label htmlFor="email">
                         Email
                     </label>

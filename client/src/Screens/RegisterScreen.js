@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {Link} from 'react-router-dom';
 import { register } from '../actions/userActions';
+import { toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function RegisterScreen(props){
     
     const [name,setName]= useState('');
@@ -17,18 +19,45 @@ function RegisterScreen(props){
     const {userInfo,loading,error}=userRegister;
  const dispatch=useDispatch();
  useEffect(()=>{
-     if(userInfo){
-         props.history.push("/")
-     }
+    if(userInfo){
+
+        props.history.push("/")
+        notify();
+    }
+    else if(error){
+       props.history.push("/")
+        notifyErr(); 
+    }
      return ()=>{
 
      }
 
  },[userInfo])
+ const MYLOGIN=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+        Welcome To A&S Books
+    </div>
+)
+const notify=()=>{
+    toast(<MYLOGIN/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
+const NOTLOGIN=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+        Fill The Data Correctly!
+    </div>
+)
+const notifyErr=()=>{
+    toast(<NOTLOGIN/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
 
   const submitHandler=(e)=>{
       e.preventDefault();
       dispatch(register(name,email,password,number));
+      
 
 
 
@@ -41,8 +70,6 @@ return(
         <form onSubmit={submitHandler}>
             <ul className="login-form-container">
                     <h1>REGISTER</h1>
-                    {loading && <div>Loding...</div>}
-                    {error && <div>error</div>}
                 <li>
                 
                     <label htmlFor="name">

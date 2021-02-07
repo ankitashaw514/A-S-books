@@ -1,5 +1,4 @@
 import axios from "axios"
-import { useSelector } from "react-redux";
 
 
 import { FEEDBACK_SAVE_FAIL, FEEDBACK_SAVE_REQUEST, FEEDBACK_SAVE_SUCCESS } from "../constants/feedBackConstants";
@@ -10,10 +9,10 @@ const feedback =(name,pros,cons,rating) => async (dispatch,getState)=>{
     const {
         userLogin: { userInfo }
     } = getState();
-    console.log(userInfo.token)
+    
     const {data}=await axios.post("/feedback",{name,pros,cons,rating},{
         headers: {
-            Authorization: "Bearer" + userInfo.token
+         Authorization:"Bearer" + userInfo.token
         }
 })
 

@@ -2,6 +2,8 @@ import React, { useEffect ,useState } from 'react';
 import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { listBooks } from '../actions/bookActions';
+import { toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function BooksScreen(props){
  
   const bookList= useSelector(state=>state.bookList)
@@ -10,38 +12,57 @@ function BooksScreen(props){
 
   useEffect(()=>{
     dispatch(listBooks());
+   
+ if(error){
+     props.history.push("/")
+      notifyErr(); 
+  }
     return ()=>{
       
     };
 
   },[])
   
+const NOTLOGIN=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+      You Are Not Logged In!
+    </div>
+)
+const notifyErr=()=>{
+    toast(<NOTLOGIN/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
+
+  
 return (
+  <div >
 
-  loading?<div>Loading...</div>:
-  error?<div>{error}</div>:
-
-<div style={{backgroundImage:`url(${'image/blue.png'})`,
-    backgroundRepeat:"no-repeat",height:"100%", width:"100%",backgroundSize:"cover"}}>
-            <ul className="login-form1">
-            {
+{loading? <div></div>:
+        error? <div></div>:
+  (
+<div className="books" >
+           
+ {
   books.map(book =>
-    <li key={book.id}className="login-form-container1">
-          <li><Link to={'/showBook/'+ book._id}><img src={book.image} alt="image"></img></Link></li>
-           <li><Link to={'/showBook/' + book._id}>{book.name}</Link></li>
-           <li>{book.author} </li>
-           <li>{book.edition}</li>
-            <li>{book.description}</li>
-            <li>{book.category}</li>
-            <li>Rs {book.price}/-</li>
+    <div key={book._id} className="book_card">
+          <Link to={'showBook/'+ book._id}><img src={book.image.url} alt="image"></img></Link>
+          <div className="book_box">
+           <Link to={'showBook/' + book._id}><h2>{book.name}</h2></Link>
+           
+            <span>Rs {book.price}/-</span>
+          </div>
 
-    </li>
+    </div>
   )
 }
-            </ul>
+          
 </div>
 )
-}
-            
 
+}
+</div>
+            
+)
+}
 export default BooksScreen;

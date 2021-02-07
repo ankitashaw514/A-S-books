@@ -1,7 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route,Link } from 'react-router-dom';
-import './App.css';
 import HomeScreen from './Screens/HomeScreen'
 import BooksScreen from './Screens/BooksScreen';
 import BookCartScreen from './Screens/BookCartScreen';
@@ -9,20 +8,27 @@ import LoginScreen from './Screens/LoginScreen';
 import RegisterScreen from './Screens/RegisterScreen';
 import AddBookScreen from './Screens/AddBookScreen';
 import FeedBackScreen from './Screens/FeedbackScreen';
+import FavoriteScreen from './Screens/FavoriteScreen'
 import { useSelector } from 'react-redux';
-
-
+import './App.css';
 function App(props){
+   
     const[toggle,setToggle]=useState(false);
+   
     const userLogin=useSelector(state=>state.userLogin);
-    const {userInfo}=userLogin;
+    const  {userInfo} = userLogin;
+
     const openMenu=()=>{
         setToggle(true);
+    
        }
    const closeMenu=()=>{
    setToggle(false);
    }
    
+   
+  
+  
 return (
 <BrowserRouter>
     <div className="grid-container">
@@ -32,16 +38,26 @@ return (
                         &#9776;
                     </button>
                     <Link to="/"></Link>
-                    <Link to="#"style={{hover:"none"}}>A&S Books</Link>
+                    <Link to="#">A&S Books</Link>
                 </div>
-                <div className="profile">
+                    <div className="profile">
                     {
-                        userInfo ? <h3>{userInfo.name}</h3>:
+                        (userInfo)?
+                        <h3>{userInfo.name}</h3>  
+                       
+                        :
+                            
+        
                         <Link to="/login">Login</Link>
+                        
+                        
                     }
-                    
+                   
                     
                 </div>
+                
+               
+             
                 
             </header>
             {toggle && 
@@ -51,22 +67,22 @@ return (
                  <h4 style={{color:"#cf988a"}}>Categories</h4>
                  <ul>
                      <li>
-                         <Link to="/">Home</Link>
+                         <Link to="/" onClick={closeMenu}>Home</Link>
                      </li>
                      <li>
-                         <Link to="/showBooks">Show Books</Link>
+                         <Link to="/showBooks" onClick={closeMenu}>Show Books</Link>
                      </li>
                      <li>
-                         <Link to="/addBook">Add Books</Link>
+                         <Link to="/addBook" onClick={closeMenu}>Add Books</Link>
                      </li>
                      <li>
-                         <Link to="/myBook">My Books</Link>
+                         <Link to="/myBook" onClick={closeMenu}>My Books</Link>
                      </li>
                      <li>
-                         <Link to="/myFavorite">My Favourites</Link>
+                         <Link to="/myFavorite" onClick={closeMenu}>My Favourites</Link>
                      </li>
                      <li>
-                         <Link to="/feedback">Feedback</Link>
+                         <Link to="/feedback" onClick={closeMenu}>Feedback</Link>
                      </li>
                  </ul>
  
@@ -79,7 +95,7 @@ return (
               <Route path="/register"  component={RegisterScreen}/>
               <Route path="/addbook"  component={AddBookScreen}/>
               <Route path="/feedback" component={FeedBackScreen}/>
-
+                <Route path="/myfavorite" component={FavoriteScreen}/>
                 <Route path="/showBooks" component={BooksScreen}/>
                 <Route path="/showBook/:id" component={BookCartScreen}/>
                 <Route path="/" exact={true} component={HomeScreen}/>

@@ -21,7 +21,7 @@ router.get('/',(req,res)=>{
       res.status(404).send({message:"books not found"});
   })
 })
-router.post('/register',  async(req, res) => {
+router.post('/register', (req, res) => {
  const user = new User();
   user.name = req.body.name;
   user.email = req.body.email;
@@ -34,17 +34,37 @@ console.log(user);
     res.end();
    }
    else{
+   const  token= getToken({id:docs._id})
+   res.cookie('token',token,{
+    httpOnly:true,
+    path:'/profile/token'
+   })
+        
    res.send({
       _id:docs.id,
         name: docs.name,
         email:docs.email,
         number:docs.number,
         isAdmin: docs.isAdmin,
+        token:token
+
+   })    
+     token:(req,res)=>{
+       try{
+       const rf_token=req.cookies.token;
+       if(!rf_token) return res.status(400).json({msg:"please login or register"})
+       else{
+       return  res.json({rf_token});
+       }
         
-        token: getToken(docs)
-        
-    })
-    res.end();
+       }
+       catch(err){
+         return res.status(500).json({msg:err.message})
+       }
+       
+     }   
+  
+    
    }
  })
 })
@@ -57,6 +77,11 @@ router.post('/login',(req,res)=>{
     })
     .then((loginUser)=>{
       console.log(loginUser)
+      const  token= getToken({id:loginUser._id})
+   res.cookie('token',token,{
+    httpOnly:true,
+    path:'/profile/token'
+   })
       return res.send({
         _id:loginUser._id,
           name:loginUser.name,
@@ -64,7 +89,7 @@ router.post('/login',(req,res)=>{
           
           number:loginUser.number,
           isAdmin:loginUser.isAdmin,
-          token:getToken(loginUser)
+          token:token
       })
     })
       
@@ -102,6 +127,16 @@ router.delete('/',(req,res)=>{
   .catch(err=>{
       res.status(404).send({message:"books not found"});
   })
+})
+router.get('/logout',(req,res)=>{
+try{
+  res.clearCookie('token',{path:'/profile/token'})
+  return res.json({msg:"loged Out"})
+
+}
+catch (error) {
+  return res.json({ message: error.message });
+}
 })
 
 

@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {Link} from 'react-router-dom';
 import { addBook } from '../actions/bookActions';
+import { toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function AddBookScreen(props){
     
     const [name,setName]= useState('');
-    const [image,setImage]= useState('');
+    
+    const [file,setFile]= useState('');
     const [author,setAuthor]= useState('');
     const [edition,setEdition]= useState('');
     const [discription,setDiscription]= useState('');
@@ -17,31 +19,56 @@ function AddBookScreen(props){
     const {loading:loadingSave,success:successSave,error:errorSave}=bookAdd;
  const dispatch=useDispatch();
  useEffect(()=>{
-     
-       
+    if(successSave){
+        props.history.push("/")
+          notify()
+      }
+      else if(errorSave)
+       {
+        props.history.push("/")
+        notifyErr() 
+       }
      return ()=>{
 
      }
 
  },[])
+ const MYLOGIN=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+        Your Book is Successfully Added
+    </div>
+)
+const notify=()=>{
+    toast(<MYLOGIN/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
+const NOTLOGIN=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+        You Are Not Logged In!
+    </div>
+)
+const notifyErr=()=>{
+    toast(<NOTLOGIN/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
 
-  const submitHandler=(e)=>{
+  const submitHandler = (e)=>{
       e.preventDefault();
-      console.log(image);
-      const fd= new FormData();
-      fd.append('image',image,image.name);
-      fd.append('name',name)
-      fd.append('author',author)
-      fd.append('edition',edition)
-      fd.append('discription',discription)
-      fd.append('category',category)
-      fd.append('price',price)
+      const fd = new FormData();
+      fd.append("file",file)
+      fd.append("name",name)
+      fd.append("author",author)
+      fd.append("edition",edition)
+      fd.append("discription",discription)
+      fd.append("category",category)
+      fd.append("price",price)
+
       dispatch(addBook(fd));
       
-
-
-
-  }
+      
+}
 
  
 return(
@@ -65,11 +92,11 @@ return(
                 <li>
                    
                 
-                   <label htmlFor="image">
+                   <label htmlFor="file">
                        Image
                    </label>
-                   <input type="file" name="image" id="image" onChange={(e)=>{
-                       setImage(e.target.files[0])
+                   <input type="file" name="file" id="file" onChange={(e)=>{
+                       setFile(e.target.files[0])
                    }} />
                </li>
                 <li>
@@ -96,7 +123,7 @@ return(
                    <label htmlFor="discription">
                        Discription
                    </label>
-                   <textarea  name="discription" id="discription" onChange={(e)=>{
+                   <textarea type="text" name="discription" id="discription" onChange={(e)=>{
                        setDiscription(e.target.value)
                    }}/>
                </li>

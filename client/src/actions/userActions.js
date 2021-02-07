@@ -11,7 +11,7 @@ const login =(email,password) => async (dispatch)=>{
     try{
     const {data}=await axios.post("/profile/login",{email,password});
     dispatch({type:USER_LOGIN_SUCCESS,payload:data})
-     Cookie.set('userInfo',JSON.stringify(data),{expires:7});
+     Cookie.set("userInfo",JSON.stringify(data),{expires:7});
     }
     catch(error){
         dispatch({type:USER_LOGIN_FAIL,payload:error.message})
@@ -26,7 +26,7 @@ const register =(name,email,password,number) => async (dispatch)=>{
     try{
     const {data}=await axios.post("/profile/register",{name,email,password,number});
     dispatch({type:USER_REGISTER_SUCCESS,payload:data})
-    Cookie.set('userInfo',JSON.stringify(data));
+    Cookie.set("userInfo",JSON.stringify(data));
     }
     catch(error){
         dispatch({type:USER_REGISTER_FAIL,payload:error.message})

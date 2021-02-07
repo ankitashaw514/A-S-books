@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {feedback} from '../actions/feedBackActions';
 
 import {Link} from 'react-router-dom';
+import { toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function FeedbackScreen(props){
     
     const [name,setName]= useState('');
@@ -25,10 +27,26 @@ function FeedbackScreen(props){
      }
 
  },[])
+ const MYLOGIN=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+        Thank You For Your Valuable Feedback!
+    </div>
+)
+const notify=()=>{
+    toast(<MYLOGIN/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
 
   const submitHandler=(e)=>{
       e.preventDefault();
       dispatch(feedback(name,pros,cons,rating));
+      if(feed){
+        props.history.push("/")
+        notify();
+         }
+      
+      
  } 
 return(
     

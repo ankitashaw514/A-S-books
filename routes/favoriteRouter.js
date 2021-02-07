@@ -1,17 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Favorites = require('../models/favorite');
-const Books = require('../models/addBook');
+const {isAuth}=require('../authenticate')
 const favoriteRouter = express.Router();
 
 favoriteRouter.use(bodyParser.json());
 
 favoriteRouter.route('/')
-.get((req,res,next) => {
-    Favorites.findOne({user: req.user._id})
+.get(isAuth,(req,res,next) => {
+    const id = req.headers.user;
+    console.log(id);
+    Favorites.findOne({user:id})
     .populate('user')
     .populate('books')
     .then((favorites) => {
+        console.log(favorites)
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(favorites);
@@ -19,7 +22,7 @@ favoriteRouter.route('/')
     .catch((err) => next(err));
 })
 
-.delete((req, res, next) => {
+/*.delete((req, res, next) => {
     Favorites.findOneAndRemove({"user": req.user._id})
     .then((resp) => {
         res.statusCode = 200;
@@ -27,25 +30,30 @@ favoriteRouter.route('/')
         res.json(resp);
     }, (err) => next(err))
     .catch((err) => next(err));   
-});
+});*/
 
 favoriteRouter.route('/:dishId')
 
-.post( (req, res, next) => {
-    Favorites.findOne({user: req.user._id})
+.post(isAuth, (req, res, next) => {
+    
+    const id = req.headers.user;
+    console.log(id);
+    Favorites.findOne({user:id})
     .then((favorite) => {
         if (favorite) {            
-            if (favorite.dishes.indexOf(req.params.dishId) === -1) {
-                favorite.dishes.push(req.params.dishId)
+            if (favorite.books.indexOf(req.params.dishId) === -1) {
+                favorite.books.push(req.params.dishId)
                 favorite.save()
-                .then((favorite) => {
-                  Favorites.findById(favorite._id)
+                .then((favorite1) => {
+                  Favorites.findById(favorite1._id)
                   .populate('user')
                   .populate('books')
-                  .then((favorite) => {
+                  .then((favorite2) => {
+                    console.log(favorite2)
                       res.statusCode = 200;
                       res.setHeader('Content-Type', 'application/json');
-                      res.json(favorite);
+                      res.json(favorite2);
+                      
                   })
               })
               .catch((err) => {
@@ -53,16 +61,17 @@ favoriteRouter.route('/:dishId')
               })
         }
         else {
-            Favorites.create({"user": req.user._id, "books": [req.params.dishId]})
-            favorite.save()
+            Favorites.create({"user":id, "books": [req.params.dishId]})
             .then((favorite) => {
               Favorites.findById(favorite._id)
               .populate('user')
               .populate('books')
-              .then((favorite) => {
+              .then((favorite1) => {
+                console.log(favorite1)
+
                   res.statusCode = 200;
                   res.setHeader('Content-Type', 'application/json');
-                  res.json(favorite);
+                  res.json(favorite1);
               })
           })
           .catch((err) => {
@@ -73,7 +82,7 @@ favoriteRouter.route('/:dishId')
   })
 })
 
-.delete((req, res, next) => {
+/*.delete((req, res, next) => {
     Favorites.findOne({user: req.user._id})
     .then((favorite) => {
         if (favorite) {            
@@ -105,7 +114,7 @@ favoriteRouter.route('/:dishId')
         }
     }, (err) => next(err))
     .catch((err) => next(err));
-});
+});*/
 
 
 module.exports = favoriteRouter;

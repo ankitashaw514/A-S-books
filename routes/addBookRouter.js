@@ -8,6 +8,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cloudinary =require('cloudinary');
 const { fstat } = require('fs');
+const myBook = require('../models/myBook');
 require('dotenv').config();
 
 
@@ -71,9 +72,10 @@ cloudinary.config({
         const book= new addBook();
      book.name=req.body.name;
      book.image={
-       public_id:result.public_id,
-       url:result.secure_url
-     },
+      url:result.secure_url,
+       public_id:result.public_id
+       
+     };
      book.author=req.body.author;
      book.edition=req.body.edition;
      book.discription=req.body.discription;
@@ -82,17 +84,57 @@ cloudinary.config({
      console.log(book);
      book.save()
           .then(Feedback=>{
-            res.json(Feedback);
-          })
+
+            
+    
+              const id = req.headers.user;
+              myBook.findOne({User:id})
+              .then((favorite) => {       
+                      if (favorite.Books.indexOf(Feedback._id) === -1) {
+                          favorite.Books.push(Feedback._id)
+                          favorite.save()
+                          .then((favorite1) => {
+                            //Favorites.findOne({_id:favorite1._id})
+                            //.populate('user')
+                            //.populate('books')
+                            //.then((favorite2) => {
+                          res.status(200).json({msg:"all okey"})
+                                
+                           /* })
+                            .catch((err) => {
+                              return next(err);
+                          })*/
+                        })
+                        .catch((err) => {
+                            return next(err);
+                        })
+                      }
+                  })
+                    .catch((err) => {
+                      
+                          myBook.create({"User":id, "Books": [Feedback._id]})
+                          .then((favorite) => {
+                             /* console.log(favorite);
+                            Favorites.findOne({_id:favorite._id})
+                            .populate("user")
+                            .populate("books")
+                            .then((favorite1) => {*/
+                              console.log(favorite)
+                                return res.json(favorite);
+                            })
+                            .catch((err) => {
+                              return next(err);
+                          })
+              
+                    })
+                    
+              
+            })
+      })
           .catch(err=>{
               res.json("fill data again")
           })
-
-
-      })
       
-        
-   
     }
       catch(err){
         return res.status(400).json({msg:err});
@@ -104,17 +146,44 @@ cloudinary.config({
   
 addBookRouter.get("/:id",(req, res) => {
   
- addBook.findOne({ _id: req.params.id })
+ addBook.findById( req.params.id )
  .then(Feedback=>{
-  return res.json(Feedback);
+    return res.json(Feedback);
  })
  .catch(err=>{
    return res.json("fill data again")
  })
 });
 addBookRouter.delete("/:id", isAuth, (req, res) => {
-  addBook.findByIdAndRemove({ _id: req.params.id })
+  addBook.findByIdAndRemove( req.params.id )
   .then(Feedback=>{
+    myBook.findOne({User:req.headers.user})
+    .then((favorite) => {       
+          const index=favorite.Books.indexOf(Feedback._id);
+          favorite.Books.splice(index,1);
+                favorite.save()
+                .then((favorite1) => {
+                  //Favorites.findOne({_id:favorite1._id})
+                  //.populate('user')
+                  //.populate('books')
+                  //.then((favorite2) => {
+                res.status(200).json({msg:"all okey"})
+                      
+                 /* })
+                  .catch((err) => {
+                    return next(err);
+                })*/
+              })
+          
+              .catch((err) => {
+                  return next(err);
+              })
+            })
+
+            .catch((err) => {
+              return next(err);
+          })
+              
    return res.json(Feedback);
   })
   .catch(err=>{

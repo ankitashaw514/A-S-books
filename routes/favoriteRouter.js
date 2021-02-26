@@ -11,13 +11,11 @@ favoriteRouter.route('/')
     const id = req.headers.user;
     console.log(id);
     Favorites.findOne({user:id})
-    .populate('user')
+    
     .populate('books')
     .then((favorites) => {
         console.log(favorites)
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(favorites);
+        res.json(favorites.books);
     }, (err) => next(err))
     .catch((err) => next(err));
 })
@@ -32,55 +30,56 @@ favoriteRouter.route('/')
     .catch((err) => next(err));   
 });*/
 
-favoriteRouter.route('/:dishId')
+favoriteRouter.route('/:bookId')
 
 .post(isAuth, (req, res, next) => {
     
     const id = req.headers.user;
     console.log(id);
+    console.log(req.params.bookId)
     Favorites.findOne({user:id})
-    .then((favorite) => {
-        if (favorite) {            
-            if (favorite.books.indexOf(req.params.dishId) === -1) {
-                favorite.books.push(req.params.dishId)
+    .then((favorite) => {       
+            if (favorite.books.indexOf(req.params.bookId) === -1) {
+                favorite.books.push(req.params.bookId)
                 favorite.save()
                 .then((favorite1) => {
-                  Favorites.findById(favorite1._id)
-                  .populate('user')
-                  .populate('books')
-                  .then((favorite2) => {
-                    console.log(favorite2)
-                      res.statusCode = 200;
-                      res.setHeader('Content-Type', 'application/json');
-                      res.json(favorite2);
+                  //Favorites.findOne({_id:favorite1._id})
+                  //.populate('user')
+                  //.populate('books')
+                  //.then((favorite2) => {
+                    console.log(favorite1)
+                     return res.json(favorite1);
                       
-                  })
+                 /* })
+                  .catch((err) => {
+                    return next(err);
+                })*/
               })
               .catch((err) => {
                   return next(err);
               })
-        }
-        else {
-            Favorites.create({"user":id, "books": [req.params.dishId]})
-            .then((favorite) => {
-              Favorites.findById(favorite._id)
-              .populate('user')
-              .populate('books')
-              .then((favorite1) => {
-                console.log(favorite1)
-
-                  res.statusCode = 200;
-                  res.setHeader('Content-Type', 'application/json');
-                  res.json(favorite1);
-              })
-          })
+            }
+        })
           .catch((err) => {
-              return next(err);
-          });
-        }
-      }
+                console.log(req.params.bookId);
+                Favorites.create({"user":id, "books": [req.params.bookId]})
+                .then((favorite) => {
+                   /* console.log(favorite);
+                  Favorites.findOne({_id:favorite._id})
+                  .populate("user")
+                  .populate("books")
+                  .then((favorite1) => {*/
+                    console.log(favorite)
+                      return res.json(favorite);
+                  })
+                  .catch((err) => {
+                    return next(err);
+                })
+    
+          })
+          
+    
   })
-})
 
 /*.delete((req, res, next) => {
     Favorites.findOne({user: req.user._id})

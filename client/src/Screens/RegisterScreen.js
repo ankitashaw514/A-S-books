@@ -57,11 +57,7 @@ const notifyErr=()=>{
   const submitHandler=(e)=>{
       e.preventDefault();
       dispatch(register(name,email,password,number));
-      
-
-
-
-  }
+}
 
  
 return(
@@ -75,7 +71,8 @@ return(
                     <label htmlFor="name">
                         Name
                     </label>
-                    <input type="text" name="name" id="name" onChange={(e)=>{
+                    <input type="text" name="name" id="name" required onChange={(e)=>{
+                   
                         setName(e.target.value)
                     }}/>
                 </li>
@@ -85,7 +82,7 @@ return(
                     <label htmlFor="email">
                         Email
                     </label>
-                    <input type="email" name="email" id="email" onChange={(e)=>{
+                    <input type="email" name="email" id="email" required onChange={(e)=>{
                         setEmail(e.target.value)
                     }}/>
                 </li>
@@ -93,7 +90,7 @@ return(
                     <label htmlFor="password">
                         Password
                     </label>
-                    <input type="password" name="password" id="password" onChange={(e)=>{
+                    <input type="password" name="password" id="password" required onChange={(e)=>{
                         setPassword(e.target.value)
                     }}/>
                 </li>
@@ -103,7 +100,7 @@ return(
                     <label htmlFor="number">
                         Number
                     </label>
-                    <input type="number" name="number" id="number" onChange={(e)=>{
+                    <input type="number" name="number" id="number" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required onChange={(e)=>{
                         setNumber(e.target.value)
                     }}/>
                 </li>

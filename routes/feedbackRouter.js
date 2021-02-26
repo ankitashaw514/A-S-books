@@ -15,7 +15,7 @@ feedbackRouter.use(bodyParser.json());
 feedbackRouter.route('/')
 
 
-  .get(isAuth,(req, res) => {
+  .get(isAuth,checkAdmin,(req, res) => {
     feedback.find({})
     .then((users)=>{
       res.json(users);
@@ -38,7 +38,7 @@ feedbackRouter.route('/')
 
   
 
-  .delete((req, res) => {
+  .delete(isAuth,checkAdmin,(req, res) => {
     
 
      feedback.remove().

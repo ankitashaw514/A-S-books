@@ -1,14 +1,16 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const addBook=require('./addBook');
+const User=require('./profile');
+const Schema = mongoose.Schema;
 
     const favoriteSchema=new Schema({
         user:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:'User'
+            ref:"User"
         },
         books:[{
             type:mongoose.Schema.Types.ObjectId,
-            ref:'Book'
+            ref:"addBook"
         }]
     },{
         timestamps:true

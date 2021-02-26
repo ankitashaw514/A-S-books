@@ -23,7 +23,7 @@ const isAuth = (req, res, next) => {
     const token = req.headers.authorization;
     
     if (token) {
-        const onlyToken = token.slice(6, token.length);
+        const onlyToken = token.slice(7, token.length);
         //console.log(token)
         jwt.verify(onlyToken, config.JWT_SECRET, (err, decode) => {
             if (err) {

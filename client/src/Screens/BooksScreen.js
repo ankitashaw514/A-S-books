@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function BooksScreen(props){
  
   const bookList= useSelector(state=>state.bookList)
+  
   const {books,loading,error}=bookList;
   const dispatch=useDispatch();
 
@@ -41,16 +42,16 @@ return (
 {loading? <div></div>:
         error? <div></div>:
   (
-<div className="books" >
+<div className="books">
            
  {
-  books.map(book =>
-    <div key={book._id} className="book_card">
-          <Link to={'showBook/'+ book._id}><img src={book.image.url} alt="image"></img></Link>
+  books.map(book1 =>
+    <div key={book1._id} className="book_card">
+          <Link to={'/showBook/'+ book1._id}><img src={book1.image.url} alt="book"></img></Link>
           <div className="book_box">
-           <Link to={'showBook/' + book._id}><h2>{book.name}</h2></Link>
+           <Link to={'/showBook/' + book1._id}><h2>{book1.name}</h2></Link>
            
-            <span>Rs {book.price}/-</span>
+            <span>Rs {book1.price}/-</span>
           </div>
 
     </div>

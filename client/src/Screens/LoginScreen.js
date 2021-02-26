@@ -21,10 +21,7 @@ function LoginScreen(props){
         props.history.push("/")
         notify();
     }
-    else if(error){
-       props.history.push("/") 
-       notifyErr();
-    }
+    
      return ()=>{
 
      }
@@ -54,6 +51,7 @@ const notifyErr=()=>{
       e.preventDefault();
       dispatch(login(email,password));
       
+      
     
 
  }
@@ -69,7 +67,7 @@ return(
                     <label htmlFor="email">
                         Email
                     </label>
-                    <input type="email" name="email" id="email" onChange={(e)=>{
+                    <input type="email" name="email" id="email" required onChange={(e)=>{
                         setEmail(e.target.value)
                     }}/>
                 </li>
@@ -77,7 +75,7 @@ return(
                     <label htmlFor="password">
                         Password
                     </label>
-                    <input type="password" name="password" id="password" onChange={(e)=>{
+                    <input type="password" name="password" id="password" required onChange={(e)=>{
                         setPassword(e.target.value)
                     }}/>
                 </li>

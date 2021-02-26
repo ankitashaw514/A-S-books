@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const feedback=require('./routes/feedbackRouter')
 const router=require('./routes/profileRouter')
 const addBook =require('./routes/addBookRouter')
+const myBook=require('./routes/myBookRouter')
 const path = require('path');
 const cors =require("cors");
 const fileUpload =require('express-fileupload')
@@ -45,6 +46,7 @@ app.use('/profile',router);
 app.use('/feedback',feedback);
 app.use('/addBook',addBook);
 app.use('/favorite',favorite);
+app.use('/myBook',myBook);
 
 
 

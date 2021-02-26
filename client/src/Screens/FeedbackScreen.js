@@ -19,32 +19,61 @@ function FeedbackScreen(props){
     const userFeedback=useSelector(state=>state.userFeedback);
     const {feed,loading,error}=userFeedback;
  const dispatch=useDispatch();
+ var feed1=false;
  useEffect(()=>{
-     
+     if(feed && feed1){
+        props.history.push("/")
+         notify1();
+     }
+     else if(feed){
+        props.history.push("/")
+        notify(); 
+        feed1=true; 
+     }
+     else if(error){
+        props.history.push("/")
+        notifyErr();
+     }
     
      return ()=>{
 
      }
 
- },[])
+ },[feed])
  const MYLOGIN=()=>(
     
     <div className="notify" style={{color:"black"}}>
         Thank You For Your Valuable Feedback!
     </div>
 )
+const MYLOGIN1=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+        You Already Submitted Your Feedback!
+    </div>
+)
 const notify=()=>{
+    toast(<MYLOGIN1/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
+const notify1=()=>{
     toast(<MYLOGIN/>,
+    {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
+}
+const NOTLOGIN=()=>(
+    
+    <div className="notify" style={{color:"black"}}>
+        Go And Register First!
+    </div>
+)
+const notifyErr=()=>{
+    toast(<NOTLOGIN/>,
     {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
 }
 
   const submitHandler=(e)=>{
       e.preventDefault();
       dispatch(feedback(name,pros,cons,rating));
-      if(feed){
-        props.history.push("/")
-        notify();
-         }
       
       
  } 
@@ -62,7 +91,7 @@ return(
                     <label htmlFor="name">
                         Name
                     </label>
-                    <input type="text" name="name" id="name" onChange={(e)=>{
+                    <input type="text" name="name" id="name" required onChange={(e)=>{
                         setName(e.target.value)
                     }}/>
                 </li>
@@ -70,7 +99,7 @@ return(
                     <label htmlFor="pros">
                         Pros
                     </label>
-                    <input type="text" name="pros" id="pros" onChange={(e)=>{
+                    <input type="text" name="pros" id="pros" required onChange={(e)=>{
                         setPros(e.target.value)
                     }}/>
                 </li>
@@ -78,7 +107,7 @@ return(
                     <label htmlFor="cons">
                         Cons
                     </label>
-                    <input type="text" name="cons" id="cons" onChange={(e)=>{
+                    <input type="text" name="cons" id="cons" required onChange={(e)=>{
                         setCons(e.target.value)
                     }}/>
                 </li>
@@ -88,7 +117,7 @@ return(
                     <label htmlFor="rating">
                         Rating
                     </label>
-                    <select name="rating" id="rating" onChange={(e)=>{
+                    <select name="rating" id="rating" required onChange={(e)=>{
                         setRating(e.target.value)
                     }}>
                         <option value="1">1</option>

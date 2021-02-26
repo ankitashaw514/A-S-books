@@ -1,13 +1,14 @@
-import {FAVORITE_ADD_FAIL, FAVORITE_ADD_REQUEST, FAVORITE_ADD_SUCCESS, FAVORITE_DETAILS_FAIL, FAVORITE_DETAILS_REQUEST, FAVORITE_DETAILS_SUCCESS } from "../constants/bookConstants";
+import {FAVORITE_ADD_FAIL, FAVORITE_ADD_REQUEST, FAVORITE_ADD_SUCCESS,
+     FAVORITE_DETAILS_FAIL, FAVORITE_DETAILS_REQUEST, FAVORITE_DETAILS_SUCCESS } from "../constants/bookConstants";
 
 function favoriteReducer(state = { favorite:{}}, action) {
     switch (action.type) {
         case FAVORITE_ADD_REQUEST:
-            return { loading: true};
+            return { loading1: true};
         case FAVORITE_ADD_SUCCESS:
-            return { loading: false, favorite: action.payload };
+            return { loading1: false, favorite: action.payload };
         case FAVORITE_ADD_FAIL:
-            return { loading: false, error: action.payload };
+            return { loading1: false, error1: action.payload };
         default:
             return state;
     }

@@ -22,7 +22,7 @@ function bookListReducer(state = { books: [] }, action) {
 function bookDetailsReducer(state = { book: {} }, action) {
     switch (action.type) {
         case BOOK_DETAILS_REQUEST:
-            return { loading: true, book: {} };
+            return { loading: true };
         case BOOK_DETAILS_SUCCESS:
             return { loading: false, book: action.payload };
         case BOOK_DETAILS_FAIL:

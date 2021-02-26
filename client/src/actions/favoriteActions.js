@@ -15,7 +15,7 @@ const  addFavorite = (bookId)=> async (dispatch,getState)=>{
     } = getState();
       const {data}=await  axios.post('/favorite/'+ bookId,{
         headers: {
-          Authorization:"Bearer" + userInfo.token,
+          Authorization:"Bearer " + userInfo.token,
           User:userInfo._id
          }
       }); 
@@ -34,7 +34,7 @@ const  getFavorite = ()=> async (dispatch,getState)=>{
   } = getState();
     const {data}=await  axios.get('/favorite',{
       headers: {
-        Authorization:"Bearer" + userInfo.token,
+        Authorization:"Bearer " + userInfo.token,
         User:userInfo._id
        }
     }); 

@@ -3,7 +3,7 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 const User = require('../models/profile');
-const  {getToken} = require('../authenticate');
+const  {getToken, isAuth, checkAdmin} = require('../authenticate');
 
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.use(bodyParser.json());
 
 
 /* GET users listing. */
-router.get('/',(req,res)=>{
+router.get('/', isAuth,checkAdmin,(req,res)=>{
   User.find({})
   .then(books=>{
     res.json(books);
@@ -107,7 +107,7 @@ router.post('/login',(req,res)=>{
 router.get("/createadmin", async (req, res) => {
   try {
       const user = new User({
-          name: "ankita",
+          name: "Ankita",
           email: "ankita@gmail.com",
           password: "1234",
           isAdmin: true
@@ -119,7 +119,7 @@ router.get("/createadmin", async (req, res) => {
   }
 });
 
-router.delete('/',(req,res)=>{
+router.delete('/',isAuth,checkAdmin,(req,res)=>{
   User.remove()
   .then(books=>{
     res.json(books);
@@ -128,7 +128,7 @@ router.delete('/',(req,res)=>{
       res.status(404).send({message:"books not found"});
   })
 })
-router.get('/logout',(req,res)=>{
+/*router.get('/logout',(req,res)=>{
 try{
   res.clearCookie('token',{path:'/profile/token'})
   return res.json({msg:"loged Out"})
@@ -137,7 +137,7 @@ try{
 catch (error) {
   return res.json({ message: error.message });
 }
-})
+})*/
 
 
 

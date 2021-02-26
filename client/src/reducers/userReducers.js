@@ -1,4 +1,5 @@
 import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, 
+    USER_LOGOUT, 
     USER_REGISTER_FAIL, USER_REGISTER_REQUEST,USER_REGISTER_SUCCESS } from "../constants/userConstants";
 
 function userLoginReducer (state={},action){
@@ -9,6 +10,7 @@ function userLoginReducer (state={},action){
             return {loading:false,userInfo:action.payload};
         case USER_LOGIN_FAIL:
             return {loading:false,error:action.payload}
+       
         default:
             return state;
     }
@@ -21,8 +23,19 @@ function userRegisterReducer (state={},action){
             return {loading:false,userInfo:action.payload};
         case USER_REGISTER_FAIL:
             return {loading:false,error:action.payload}
+
+    
         default:
             return state;
     }
 }
-export {userLoginReducer,userRegisterReducer};
+function userLogoutReducer(state={},action){
+    switch(action.type){
+        case USER_LOGOUT:
+            return {logout:action.payload};
+         default:   
+            return state;
+    }
+}
+
+export {userLoginReducer,userRegisterReducer,userLogoutReducer}

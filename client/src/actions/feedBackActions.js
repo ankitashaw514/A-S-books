@@ -12,7 +12,7 @@ const feedback =(name,pros,cons,rating) => async (dispatch,getState)=>{
     
     const {data}=await axios.post("/feedback",{name,pros,cons,rating},{
         headers: {
-         Authorization:"Bearer" + userInfo.token
+         Authorization:"Bearer " + userInfo.token
         }
 })
 

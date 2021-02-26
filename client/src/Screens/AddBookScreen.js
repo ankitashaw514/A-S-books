@@ -16,18 +16,9 @@ function AddBookScreen(props){
     const [category,setCategory]= useState('');
     const [price,setPrice]= useState('');
     const bookAdd=useSelector(state=>state.bookAdd);
-    const {loading:loadingSave,success:successSave,error:errorSave}=bookAdd;
+    var {loading:loadingSave,success:successSave,error:errorSave}=bookAdd;
  const dispatch=useDispatch();
  useEffect(()=>{
-    if(successSave){
-        props.history.push("/")
-          notify()
-      }
-      else if(errorSave)
-       {
-        props.history.push("/")
-        notifyErr() 
-       }
      return ()=>{
 
      }
@@ -53,6 +44,17 @@ const notifyErr=()=>{
     toast(<NOTLOGIN/>,
     {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
 }
+const notification=async()=>{
+    if(successSave){
+        props.history.push("/")
+          notify()
+      }
+      else if(errorSave)
+       {
+        props.history.push("/")
+        notifyErr() 
+       }
+}
 
   const submitHandler = (e)=>{
       e.preventDefault();
@@ -66,6 +68,10 @@ const notifyErr=()=>{
       fd.append("price",price)
 
       dispatch(addBook(fd));
+      props.history.push("/")
+          notify()
+        
+      
       
       
 }

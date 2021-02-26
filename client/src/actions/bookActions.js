@@ -19,7 +19,7 @@ const listBooks =() => async (dispatch)=>{
 }
 const detailsBook = (bookId)=> async(dispatch)=>{
    try{
-    dispatch({type:BOOK_DETAILS_REQUEST ,payload:bookId});
+    dispatch({type:BOOK_DETAILS_REQUEST,payload:bookId});
     
     
     const {data}=await axios.get('/addBook/'+bookId);
@@ -40,7 +40,8 @@ const addBook =(fd) => async (dispatch,getState)=>{
 
     const {data}=await axios.post('/addBook',fd,{
         headers: {
-            Authorization:"Bearer" + userInfo.token
+            Authorization:"Bearer " + userInfo.token,
+            User:userInfo._id
            }
     }
     

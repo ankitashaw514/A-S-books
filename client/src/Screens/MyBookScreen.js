@@ -1,17 +1,55 @@
 import React, { useEffect } from 'react'
 import { useDispatch,useSelector } from 'react-redux';
 import {Link} from 'react-router-dom';
+import { toast} from 'react-toastify';
+import {FaEdit,FaBeer} from "react-icons/fa"
+
 import { deleteMyBook, getMyBook } from '../actions/myBookActions';
 function MyBookScreen(props){
     const myBook =useSelector(state =>state.myBook);
     const deletedBook=useSelector(state=>state.myBookDelete);
     const {mybook,loading1,error1}=deletedBook;
     const {mybooks,loading,error}= myBook;
+    const  { userInfo }
+  =useSelector(state=>state.userLogin);
+
    const  dispatch=useDispatch();
     useEffect(()=>{
+      if(userInfo){
         dispatch(getMyBook());
+        
+          
+        
+        
+    }
+    else{
+      notifyErr();
+    }
     
-    },[mybook])
+    },[])
+
+
+    const MYLOGIN=()=>(
+    
+      <div className="notify" style={{color:"black"}}>
+          You Have Not Added Any  Books Yet!
+      </div>
+  )
+  const notify=()=>{
+      toast(<MYLOGIN/>,
+      {position:toast.POSITION.TOP_CENTER,autoClose:2000}) 
+  }
+  const NOTLOGIN=()=>(
+      
+      <div className="notify" style={{color:"black"}}>
+          You Are Not Logged In!
+      </div>
+  )
+  const notifyErr=()=>{
+      toast(<NOTLOGIN/>,
+      {position:toast.POSITION.TOP_CENTER,autoClose:2000}) 
+  }
+  
 
     const deleteBook=(bookId)=>{
         dispatch(deleteMyBook(bookId));
@@ -31,9 +69,9 @@ function MyBookScreen(props){
                 <div className="book_box">
                 <h2>{book.name}</h2>
                  <span>Rs {book.price}/-</span>
-                 <Link to="/myBook/edit" style={{backgroundColor:'green',color:'white'}}>Edit</Link>
+                 <Link to={"/myBooks/edit/"+book._id} style={{backgroundColor:'green',color:'white'}}>Edit</Link>
                  <Link onClick={()=>{
-                   deleteBook(book._id)}}  style={{backgroundColor:'red',color:'white'}}>Delete</Link>
+                   deleteBook(book._id)}}  style={{backgroundColor:"#2a506e7e",color:'white'}}>Delete</Link>
           </div>
       
           </div>

@@ -1,24 +1,29 @@
 
 
-/*import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addBook } from '../actions/bookActions';
+import { editBook } from '../actions/myBookActions';
 import { toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 function MyBookEditScreen(props){
+    const myBook =useSelector(state=>state.myBook);
+    const {mybooks}=myBook;
+    const bookedit=mybooks.filter(x=>(x._id===props.match.params.id));
+    const [name,setName]= useState(bookedit[0].name);
     
-    const [name,setName]= useState(props.book.name);
     
-    const [file,setFile]= useState(props.book.file);
-    const [author,setAuthor]= useState(props.book.author);
-    const [edition,setEdition]= useState(props.book.edition);
-    const [discription,setDiscription]= useState(props.book.discription);
-    const [category,setCategory]= useState(props.book.category);
-    const [price,setPrice]= useState(props.book.price);
+    const [author,setAuthor]= useState(bookedit[0].author);
+    const [edition,setEdition]= useState(bookedit[0].edition);
+    const [discription,setDiscription]= useState(bookedit[0].discription);
+    const [category,setCategory]= useState(bookedit[0].category);
+    const [price,setPrice]= useState(bookedit[0].price);
+    const bookEdit=useSelector(state=>state.bookEdit);
+    const {editbook,loading,error}=bookEdit;
     
     
  const dispatch=useDispatch();
  useEffect(()=>{
+    
      return ()=>{
 
      }
@@ -44,32 +49,20 @@ const notifyErr=()=>{
     toast(<NOTLOGIN/>,
     {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
 }
-const notification=async()=>{
-    if(successSave){
-        props.history.push("/")
-          notify()
-      }
-      else if(errorSave)
-       {
-        props.history.push("/")
-        notifyErr() 
-       }
-}
 
   const submitHandler = (e)=>{
       e.preventDefault();
       const fd = new FormData();
-      fd.append("file",file)
+      
       fd.append("name",name)
       fd.append("author",author)
       fd.append("edition",edition)
       fd.append("discription",discription)
       fd.append("category",category)
       fd.append("price",price)
-
+    dispatch(editBook(props.match.params.id,fd));
       
-      props.history.push("/")
-          notify()
+      
         
       
       
@@ -82,34 +75,24 @@ return(
     backgroundRepeat:"no-repeat",height:"125vh", width:"100%",backgroundSize:"cover"}}>
         <form onSubmit={submitHandler}>
             <ul className="login-form-container">
-                    <h1>ADD BOOK</h1>
-                    {loadingSave && <div>Loding...</div>}
-                    {errorSave && <div>error</div>}
+                    <h1>EDIT BOOK</h1>
+                   
                 <li>
                    
                 
                     <label htmlFor="name">
                         Name
                     </label>
-                    <input type="text" name="name" id="name" placeholder={name} onChange={(e)=>{
+                    <input type="text" name="name" id="name" value={name}  onChange={(e)=>{
                         setName(e.target.value)
                     }}/>
                 </li>
-                <li>
-                   
                 
-                   <label htmlFor="file">
-                       Image
-                   </label>
-                   <input type="file" name="file" id="file" placeholder={file}  onChange={(e)=>{
-                       setFile(e.target.files[0])
-                   }} />
-               </li>
                 <li>
                     <label htmlFor="author">
                         Author
                     </label>
-                    <input type="text" name="author" id="author"  placeholder={author} onChange={(e)=>{
+                    <input type="text" name="author" id="author" value={author} onChange={(e)=>{
                         setAuthor(e.target.value)
                     }}/>
                 </li>
@@ -119,7 +102,7 @@ return(
                    <label htmlFor="edition">
                        Edition
                    </label>
-                   <input type="text" name="edition" id="edition" placeholder={edition}  onChange={(e)=>{
+                   <input type="text" name="edition" id="edition" value={edition}  onChange={(e)=>{
                        setEdition(e.target.value)
                    }}/>
                </li>
@@ -129,7 +112,7 @@ return(
                    <label htmlFor="discription">
                        Discription
                    </label>
-                   <textarea type="text" name="discription" id="discription" placeholder={discription} onChange={(e)=>{
+                   <textarea type="text" name="discription" id="discription" value={discription} onChange={(e)=>{
                        setDiscription(e.target.value)
                    }}/>
                </li>
@@ -139,7 +122,7 @@ return(
                    <label htmlFor="category">
                       Select Book Category
                    </label>
-                   <select name="category" id="category" placeholder={category} onChange={(e)=>{
+                   <select name="category" id="category" value={category} onChange={(e)=>{
                    setCategory(e.target.value)}}>
                     <option value="religious">Religious</option>
                     <option value="drama">Drama</option>
@@ -156,12 +139,12 @@ return(
                    <label htmlFor="price">
                        Price
                    </label>
-                   <input type="text" name="price" id="price"  placeholder={price} onChange={(e)=>{
+                   <input type="text" name="price" id="price" value={price} onChange={(e)=>{
                        setPrice(e.target.value)
                    }}/>
                </li>
                 <li>
-                <button type="submit" className="btn-primary ">Create</button>
+                <button type="submit" className="btn-primary ">Save</button>
                 </li>
                 
             </ul>
@@ -175,4 +158,4 @@ return(
 }
             
 
-export default MyBookEditScreen;*/
+export default MyBookEditScreen;

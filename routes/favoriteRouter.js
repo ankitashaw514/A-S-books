@@ -16,9 +16,9 @@ favoriteRouter.route('/')
     .then((favorites) => {
         console.log(favorites)
         res.json(favorites.books);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
+    })
+    .catch((err) => res.status(404).send({message:"error"}));
+});
 
 /*.delete((req, res, next) => {
     Favorites.findOneAndRemove({"user": req.user._id})
@@ -33,9 +33,9 @@ favoriteRouter.route('/')
 favoriteRouter.route('/:bookId')
 
 .post(isAuth, (req, res, next) => {
-    
+
     const id = req.headers.user;
-    console.log(id);
+    
     console.log(req.params.bookId)
     Favorites.findOne({user:id})
     .then((favorite) => {       
@@ -47,8 +47,8 @@ favoriteRouter.route('/:bookId')
                   //.populate('user')
                   //.populate('books')
                   //.then((favorite2) => {
-                    console.log(favorite1)
-                     return res.json(favorite1);
+                    
+                     return res.json({msg: "book added"});
                       
                  /* })
                   .catch((err) => {
@@ -56,7 +56,7 @@ favoriteRouter.route('/:bookId')
                 })*/
               })
               .catch((err) => {
-                  return next(err);
+                res.status(404).send({message:"error"});
               })
             }
         })
@@ -70,10 +70,10 @@ favoriteRouter.route('/:bookId')
                   .populate("books")
                   .then((favorite1) => {*/
                     console.log(favorite)
-                      return res.json(favorite);
+                      return res.json({msg:"book added"});
                   })
                   .catch((err) => {
-                    return next(err);
+                    res.status(404).send({message:"error"});
                 })
     
           })

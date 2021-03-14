@@ -5,7 +5,7 @@ import thunk from 'redux-thunk'
 import {bookAddReducer, bookDetailsReducer, bookListReducer} from './reducers/bookReducers'
 import { favoriteReducer, getFavoriteReducer } from './reducers/favoriteReducers';
 import { feedBackReducer } from './reducers/feedBackReducers';
-import { deleteMyBookReducer, getMyBookReducer } from './reducers/myBookReducers';
+import { deleteMyBookReducer, editMyBookReducer, getMyBookReducer } from './reducers/myBookReducers';
 import { userLoginReducer,userLogoutReducer,userRegisterReducer } from './reducers/userReducers'
 const userInfo= Cookie.getJSON("userInfo") || null;
 
@@ -21,11 +21,12 @@ const rootReducer=combineReducers({
     favoriteDetails:getFavoriteReducer,
     myBook:getMyBookReducer,
     userLogout:userLogoutReducer,
-    myBookDelete:deleteMyBookReducer
+    myBookDelete:deleteMyBookReducer,
+    bookEdit:editMyBookReducer
 })
 const reducer=(state,action)=>{
     if(action.type==="USER_LOGOUT"){
-        state=undefined
+        state=undefined;
     }
     return rootReducer(state,action)
 }

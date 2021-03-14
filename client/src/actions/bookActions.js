@@ -1,5 +1,6 @@
 import axios from "axios";
-import { BOOK_ADD_FAIL, BOOK_ADD_REQUEST, BOOK_ADD_SUCCESS, BOOK_DETAILS_FAIL, BOOK_DETAILS_REQUEST, BOOK_DETAILS_SUCCESS, BOOK_LIST_FAIL,
+import { BOOK_ADD_FAIL, BOOK_ADD_REQUEST, BOOK_ADD_SUCCESS, BOOK_DETAILS_FAIL, 
+    BOOK_DETAILS_REQUEST, BOOK_DETAILS_SUCCESS, BOOK_LIST_FAIL,
      BOOK_LIST_REQUEST, BOOK_LIST_SUCCESS } from "../constants/bookConstants"
 
 const listBooks =() => async (dispatch)=>{
@@ -22,7 +23,7 @@ const detailsBook = (bookId)=> async(dispatch)=>{
     dispatch({type:BOOK_DETAILS_REQUEST,payload:bookId});
     
     
-    const {data}=await axios.get('/addBook/'+bookId);
+    const {data}=await axios.get(`/addBook/${bookId}`);
     
     dispatch({type:BOOK_DETAILS_SUCCESS, payload:data});
 }

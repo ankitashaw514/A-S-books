@@ -15,8 +15,10 @@ myBook.findOne({User:id})
     .then((favorites) => {
         console.log(favorites)
         res.json(favorites.Books);
-    }, (err) => next(err))
-    .catch((err) => next(err));
+    })
+    .catch((err) =>{
+        res.status(404).send({message:"error"})
+    })
 })
 
 /*.delete(isAuth,(req, res, next) => {

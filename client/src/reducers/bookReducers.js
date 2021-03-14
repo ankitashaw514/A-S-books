@@ -19,12 +19,12 @@ function bookListReducer(state = { books: [] }, action) {
 }
 
 
-function bookDetailsReducer(state = { book: {} }, action) {
+function bookDetailsReducer(state = { bookDetail:{} }, action) {
     switch (action.type) {
         case BOOK_DETAILS_REQUEST:
             return { loading: true };
         case BOOK_DETAILS_SUCCESS:
-            return { loading: false, book: action.payload };
+            return { loading: false, bookDetail: action.payload };
         case BOOK_DETAILS_FAIL:
             return { loading: false, error: action.payload };
         default:

@@ -4,11 +4,11 @@ import {FAVORITE_ADD_FAIL, FAVORITE_ADD_REQUEST, FAVORITE_ADD_SUCCESS,
 function favoriteReducer(state = { favorite:{}}, action) {
     switch (action.type) {
         case FAVORITE_ADD_REQUEST:
-            return { loading1: true};
+            return { loading: true};
         case FAVORITE_ADD_SUCCESS:
-            return { loading1: false, favorite: action.payload };
+            return { loading: false, favorite: action.payload };
         case FAVORITE_ADD_FAIL:
-            return { loading1: false, error1: action.payload };
+            return { loading: false, error: action.payload };
         default:
             return state;
     }

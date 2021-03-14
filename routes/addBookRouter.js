@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const cloudinary =require('cloudinary');
 const { fstat } = require('fs');
 const myBook = require('../models/myBook');
+
 require('dotenv').config();
 
 
@@ -72,10 +73,9 @@ cloudinary.config({
         const book= new addBook();
      book.name=req.body.name;
      book.image={
-      url:result.secure_url,
+       url:result.secure_url,
        public_id:result.public_id
-       
-     };
+     }
      book.author=req.body.author;
      book.edition=req.body.edition;
      book.discription=req.body.discription;
@@ -106,7 +106,7 @@ cloudinary.config({
                           })*/
                         })
                         .catch((err) => {
-                            return next(err);
+                          res.status(404).send({message:"error"});
                         })
                       }
                   })
@@ -123,7 +123,7 @@ cloudinary.config({
                                 return res.json(favorite);
                             })
                             .catch((err) => {
-                              return next(err);
+                              res.status(404).send({message:"error"});
                           })
               
                     })
@@ -176,12 +176,12 @@ addBookRouter.delete("/:id", isAuth, (req, res) => {
               })
           
               .catch((err) => {
-                  return next(err);
+                res.status(404).send({message:"error"});
               })
             })
 
             .catch((err) => {
-              return next(err);
+              res.status(404).send({message:"error"});
           })
               
    return res.json(Feedback);
@@ -200,6 +200,32 @@ addBookRouter.delete("/:id", isAuth, (req, res) => {
   })
  });
   
+
+
+
+ addBookRouter.put('/:id',isAuth, (req, res) => {
+  
+  addBook.findById(req.params.id)
+   .then((book)=>{
+   book.name=req.body.name;
+   book.author=req.body.author;
+   book.edition=req.body.edition;
+   book.discription=req.body.discription;
+   book.category=req.body.category;
+   book.price=req.body.price;
+   book.save()
+   .then((book1)=>{
+      return res.status(200).json("oll okey");
+   })
+   .catch(err=>{
+    return res.status(400).json("not okey");
+   })
+  })
+   .catch(err=>{
+    return res.status(400).json("not okey");
+   })
+ })
+
 
   
 

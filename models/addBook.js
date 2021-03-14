@@ -5,8 +5,10 @@ const addBookSchema = new Schema({
     
     name:{type:String,required:true},
     image:{
+        type:Object,
+        url:{type:String,required:true},
         public_id:{type:String,required:true},
-        url:{type:String,required:true}
+        required:true
     },
     author:{type:String,required:true},
     edition:{type:String,required:true},

@@ -81,7 +81,7 @@ return (
              <aside  className="sidebar" id="sidebar1">
                 
              <button className="sidebar-close-button" onClick={closeMenu}>x</button>
-                 <h4 style={{color:"#113857"}}>Categories</h4>
+                 <h4 style={{color:"white"}}>Categories</h4>
                  <ul>
                      <li>
                          <Link to="/" onClick={closeMenu}>Home</Link>
@@ -131,7 +131,7 @@ return (
                 <Route path="/showBook/:id" component={BookCartScreen}/>
                 <Route path="/" exact={true} component={HomeScreen}/>
                 <Route path="/myBook" component={MyBookScreen}/>
-                <Route path="/myBook/edit" component={MyBookEditScreen}/>
+                <Route path="/myBooks/edit/:id" component={MyBookEditScreen}/>
 
 
                 

@@ -19,8 +19,11 @@ feedbackRouter.route('/')
     feedback.find({})
     .then((users)=>{
       res.json(users);
-    }
-    )
+    })
+    .catch((err)=>{
+      res.status(404).send({message:"error"});
+    })
+    
      
   })
   

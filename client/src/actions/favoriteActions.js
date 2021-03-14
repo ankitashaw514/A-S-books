@@ -13,9 +13,9 @@ const  addFavorite = (bookId)=> async (dispatch,getState)=>{
       const {
         userLogin: { userInfo }
     } = getState();
-      const {data}=await  axios.post('/favorite/'+ bookId,{
+      const {data}= await axios.post('/favorite/'+bookId,{
         headers: {
-          Authorization:"Bearer " + userInfo.token,
+          Authorization:"Bearer " +userInfo.token,
           User:userInfo._id
          }
       }); 

@@ -18,28 +18,27 @@ function FeedbackScreen(props){
 
     const userFeedback=useSelector(state=>state.userFeedback);
     const {feed,loading,error}=userFeedback;
+    const {userInfo} =useSelector(state=>state.userLogin);
  const dispatch=useDispatch();
- var feed1=false;
+
  useEffect(()=>{
-     if(feed && feed1){
-        props.history.push("/")
-         notify1();
-     }
-     else if(feed){
-        props.history.push("/")
-        notify(); 
-        feed1=true; 
-     }
-     else if(error){
-        props.history.push("/")
-        notifyErr();
-     }
+     //if(userInfo){
+         
+         
+
+     //}
+     //else{
+        
+        // notifyErr();
+     //}
+     
+     
     
      return ()=>{
 
      }
 
- },[feed])
+ },[])
  const MYLOGIN=()=>(
     
     <div className="notify" style={{color:"black"}}>
@@ -53,17 +52,17 @@ const MYLOGIN1=()=>(
     </div>
 )
 const notify=()=>{
-    toast(<MYLOGIN1/>,
+    toast(<MYLOGIN/>,
     {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
 }
 const notify1=()=>{
-    toast(<MYLOGIN/>,
+    toast(<MYLOGIN1/>,
     {position:toast.POSITION.TOP_CENTER,autoClose:1500}) 
 }
 const NOTLOGIN=()=>(
     
     <div className="notify" style={{color:"black"}}>
-        Go And Register First!
+        You Are Not Logged In!
     </div>
 )
 const notifyErr=()=>{
@@ -74,6 +73,12 @@ const notifyErr=()=>{
   const submitHandler=(e)=>{
       e.preventDefault();
       dispatch(feedback(name,pros,cons,rating));
+      /*if(feed){
+        notify();
+        props.history.push("/")
+    
+     }*/
+     props.history.push("/")
       
       
  } 
